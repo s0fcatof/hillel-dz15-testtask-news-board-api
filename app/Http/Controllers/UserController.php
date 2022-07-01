@@ -46,7 +46,10 @@ class UserController extends Controller
             'password' => ['sometimes', 'min:8']
         ]);
 
-        $data['password'] = Hash::make($data['password']);
+        if (!empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        }
+
         $user->update($data);
 
         return response(["result" => "User was successfully updated."]);

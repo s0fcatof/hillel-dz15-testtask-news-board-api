@@ -7,7 +7,6 @@ use App\Models\Post;
 use App\Models\Upvote;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -21,13 +20,12 @@ class PostController extends Controller
         $data = $request->validate([
             'title' => ['required', 'max:80'],
             'link' => ['required', 'url'],
-            'author_id' => ['required', 'exists:users,id']
         ]);
 
         Post::create([
             'title' => $data['title'],
             'link' => $data['link'],
-            'author_id' => $data['author_id']
+            'author_id' => $request->user()->id
         ]);
 
         return response([
@@ -44,8 +42,7 @@ class PostController extends Controller
     {
         $data = $request->validate([
             'title' => ['sometimes', 'max:80'],
-            'link' => ['sometimes', 'url'],
-            'author_id' => ['sometimes', 'exists:users,id']
+            'link' => ['sometimes', 'url']
         ]);
 
         $post->update($data);

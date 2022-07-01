@@ -10,6 +10,11 @@ RUN pecl install zip \
 RUN a2enmod rewrite
 
 COPY etc/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY etc/ssl/certificate.crt /etc/ssl/certificate.crt
+COPY etc/ssl/ca_bundle.crt /etc/ssl/ca_bundle.crt
+COPY etc/ssl/private/private.key /etc/ssl/private/private.key
+
+RUN a2enmod ssl
 
 WORKDIR /var/www/html
 
