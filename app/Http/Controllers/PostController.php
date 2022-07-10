@@ -19,7 +19,7 @@ class PostController extends Controller
     {
         $data = $request->validate([
             'title' => ['required', 'max:80'],
-            'link' => ['required', 'url'],
+            'link' => ['required', 'url', 'unique:posts,link'],
         ]);
 
         Post::create([
@@ -42,7 +42,7 @@ class PostController extends Controller
     {
         $data = $request->validate([
             'title' => ['sometimes', 'max:80'],
-            'link' => ['sometimes', 'url']
+            'link' => ['sometimes', 'url', 'unique:posts,link']
         ]);
 
         $post->update($data);

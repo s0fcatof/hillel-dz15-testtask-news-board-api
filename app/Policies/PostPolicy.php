@@ -7,6 +7,7 @@ use App\Models\Upvote;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\DB;
 
 class PostPolicy
 {
@@ -28,13 +29,10 @@ class PostPolicy
 
     public function upvote(User $user, Post $post)
     {
-        $existing_upvote = Upvote::query()
-            ->where([
-                ['user_id', '=', $user->id],
-                ['post_id', '=', $post->id]
-            ])->get()->first();
-
-        return $existing_upvote === null
+        return DB::table('upvotes')
+            ->where('user_id', $user->id)
+            ->where('post_id', $post->id)
+            ->doesntExist()
             ? Response::allow()
             : Response::deny('You have already upvoted this post.');
     }
